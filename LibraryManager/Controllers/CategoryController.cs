@@ -1,14 +1,10 @@
-﻿using LibraryManager.Models.Contexts;
-using LibraryManager.Models.Domains;
-using LibraryManager.Models.Repositories;
-using LibraryManager.Models.Services.Contracts;
+﻿using LibraryManager.Models.Services.Contracts;
 using LibraryManager.Models.ViewModels;
 using LibraryManager.Models.ViewModels.Category;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Linq;
 
 namespace LibraryManager.Controllers
 {
