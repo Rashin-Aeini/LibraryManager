@@ -32,6 +32,8 @@ namespace LibraryManager
 
             services.AddScoped<ICategoryService, CategoryService>();
 
+            services.AddScoped<ILibraryItemService, LibraryItemService>();
+
             //services.AddHttpContextAccessor();
 
             services.AddControllers();
