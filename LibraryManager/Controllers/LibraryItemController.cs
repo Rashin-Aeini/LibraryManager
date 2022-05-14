@@ -37,6 +37,8 @@ namespace LibraryManager.Controllers
             return Ok(pagination);
         }
 
+        #region Audio
+
         [HttpPost("[action]")]
         public ActionResult<DigitalDetailsLibraryItem> Audio([FromBody] CreateAudioLibraryItem entry)
         {
@@ -76,6 +78,10 @@ namespace LibraryManager.Controllers
 
             return Ok(details);
         }
+
+        #endregion
+
+        #region DVD
 
         [HttpPost("[action]")]
         public ActionResult<DigitalDetailsLibraryItem> DVD([FromBody] CreateDVDLibraryItem entry)
@@ -117,6 +123,10 @@ namespace LibraryManager.Controllers
             return Ok(details);
         }
 
+        #endregion
+
+        #region Book
+
         [HttpPost("[action]")]
         public ActionResult<PhysicalDetailsLibraryItem> Book([FromBody] CreateBookLibraryItem entry)
         {
@@ -157,6 +167,10 @@ namespace LibraryManager.Controllers
             return Ok(details);
         }
 
+        #endregion
+
+        #region Reference
+
         [HttpPost("[action]")]
         public ActionResult<PhysicalDetailsLibraryItem> Reference([FromBody] CreateReferenceLibraryItem entry)
         {
@@ -196,6 +210,8 @@ namespace LibraryManager.Controllers
 
             return Ok(details);
         }
+
+        #endregion
 
         [HttpDelete("{id:int}")]
         public ActionResult Delete([FromRoute] int id)
