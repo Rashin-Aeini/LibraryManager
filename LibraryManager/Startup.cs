@@ -2,6 +2,7 @@ using LibraryManager.Models.Contexts;
 using LibraryManager.Models.Repositories;
 using LibraryManager.Models.Services.Contracts;
 using LibraryManager.Models.Services.Persistence;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -36,6 +37,9 @@ namespace LibraryManager
 
             //services.AddHttpContextAccessor();
 
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer();
+
             services.AddControllers();
 
             services.AddSwaggerGen(c =>
@@ -55,6 +59,8 @@ namespace LibraryManager
             }
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
