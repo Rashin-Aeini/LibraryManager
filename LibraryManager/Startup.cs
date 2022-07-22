@@ -1,15 +1,21 @@
+using LibraryManager.Models.Configurations.Settings;
 using LibraryManager.Models.Contexts;
+using LibraryManager.Models.Domains;
 using LibraryManager.Models.Repositories;
 using LibraryManager.Models.Services.Contracts;
 using LibraryManager.Models.Services.Persistence;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System;
+using System.Text;
 
 namespace LibraryManager
 {
@@ -29,6 +35,10 @@ namespace LibraryManager
                 options.UseSqlServer(Configuration.GetConnectionString("Default"))
             );
 
+            services.AddIdentity<User, IdentityRole>()
+                .AddEntityFrameworkStores<LibraryContext>()
+                .AddDefaultTokenProviders();
+
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
             services.AddScoped<ICategoryService, CategoryService>();
@@ -38,7 +48,22 @@ namespace LibraryManager
             //services.AddHttpContextAccessor();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer();
+                .AddJwtBearer(options =>
+                {
+                    JwtSecret secret = Configuration.GetSection(nameof(JwtSecret)).Get<JwtSecret>();
+                    options.TokenValidationParameters = new TokenValidationParameters()
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidIssuer = secret.Issuer,
+                        ValidAudience = secret.Audience,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret.Key))
+                    };
+                });
+
+            services.AddTransient<JwtSecret>(provider => Configuration.GetSection(nameof(JwtSecret)).Get<JwtSecret>());
+
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             services.AddControllers();
 
